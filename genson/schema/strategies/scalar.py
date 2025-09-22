@@ -1,3 +1,4 @@
+import datetime
 from .base import SchemaStrategy, TypedSchemaStrategy
 
 
@@ -76,4 +77,21 @@ class Number(SchemaStrategy):
     def to_schema(self):
         schema = super().to_schema()
         schema['type'] = self._type
+        return schema
+
+class DateTime(TypedSchemaStrategy):
+    """
+    strategy for datetime schemas
+
+    Not JSON compliant.
+    """
+
+    JS_TYPE = "string"
+    PYTHON_TYPE = datetime.datetime
+    FORMAT = "date-time"
+
+    def to_schema(self):
+        schema = super().to_schema()
+        schema["type"] = self.JS_TYPE
+        schema["format"] = self.FORMAT
         return schema

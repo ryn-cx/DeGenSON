@@ -7,7 +7,8 @@ from .scalar import (
     Null,
     Boolean,
     Number,
-    String
+    String,
+    DateTime,
 )
 from .array import List, Tuple
 from .object import Object
@@ -17,9 +18,10 @@ BASIC_SCHEMA_STRATEGIES = (
     Boolean,
     Number,
     String,
+    DateTime,
     List,
     Tuple,
-    Object
+    Object,
 )
 
 __all__ = (
@@ -33,5 +35,6 @@ __all__ = (
     'Tuple',
     'Object',
     'Typeless',
+    'DateTime',
     'BASIC_SCHEMA_STRATEGIES'
 )
