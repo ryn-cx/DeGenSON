@@ -79,9 +79,16 @@ class Number(SchemaStrategy):
         schema['type'] = self._type
         return schema
 
-class DateTime(TypedSchemaStrategy):
+class CustomSchemaStrategy(TypedSchemaStrategy):
+    def to_schema(self):
+        schema = super().to_schema()
+        schema["type"] = self.JS_TYPE
+        schema["format"] = self.FORMAT
+        return schema
+
+class DateTime(CustomSchemaStrategy):
     """
-    strategy for datetime schemas
+    strategy for datetime.datetime schemas
 
     Not JSON compliant.
     """
@@ -90,8 +97,13 @@ class DateTime(TypedSchemaStrategy):
     PYTHON_TYPE = datetime.datetime
     FORMAT = "date-time"
 
-    def to_schema(self):
-        schema = super().to_schema()
-        schema["type"] = self.JS_TYPE
-        schema["format"] = self.FORMAT
-        return schema
+class Date(CustomSchemaStrategy):
+    """
+    strategy for datetime.date schemas
+
+    Not JSON compliant.
+    """
+
+    JS_TYPE = "string"
+    PYTHON_TYPE = datetime.date
+    FORMAT = "date"
