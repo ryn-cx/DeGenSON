@@ -107,3 +107,14 @@ class Date(CustomSchemaStrategy):
     JS_TYPE = "string"
     PYTHON_TYPE = datetime.date
     FORMAT = "date"
+
+class Duration(CustomSchemaStrategy):
+    """
+    strategy for datetime.timedelta schemas
+
+    Not JSON compliant.
+    """
+
+    JS_TYPE = "string"
+    PYTHON_TYPE = datetime.timedelta
+    FORMAT = "duration"
