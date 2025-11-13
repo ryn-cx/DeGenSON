@@ -11,7 +11,7 @@ class Typeless(SchemaStrategy):
 
     @classmethod
     def match_schema(cls, schema):
-        return 'type' not in schema
+        return "type" not in schema
 
     @classmethod
     def match_object(cls, obj):
@@ -22,7 +22,8 @@ class Null(TypedSchemaStrategy):
     """
     strategy for null schemas
     """
-    JS_TYPE = 'null'
+
+    JS_TYPE = "null"
     PYTHON_TYPE = type(None)
 
 
@@ -30,7 +31,8 @@ class Boolean(TypedSchemaStrategy):
     """
     strategy for boolean schemas
     """
-    JS_TYPE = 'boolean'
+
+    JS_TYPE = "boolean"
     PYTHON_TYPE = bool
 
 
@@ -38,46 +40,33 @@ class String(TypedSchemaStrategy):
     """
     strategy for string schemas - works for ascii and unicode strings
     """
-    JS_TYPE = 'string'
+
+    JS_TYPE = "string"
     PYTHON_TYPE = str
 
 
-class Number(SchemaStrategy):
+class Float(TypedSchemaStrategy):
     """
-    strategy for integer and number schemas. It automatically
-    converts from `integer` to `number` when a float object or a
-    number schema is added
+    strategy for float schemas
     """
-    JS_TYPES = ('integer', 'number')
-    PYTHON_TYPES = (int, float)
 
-    @classmethod
-    def match_schema(cls, schema):
-        return schema.get('type') in cls.JS_TYPES
+    JS_TYPE = "number"
+    PYTHON_TYPE = float
+
+
+class Integer(TypedSchemaStrategy):
+    """
+    strategy for integer schemas
+    """
+
+    JS_TYPE = "integer"
+    PYTHON_TYPE = int
 
     @classmethod
     def match_object(cls, obj):
         # cannot use isinstance() because boolean is a subtype of int
-        return type(obj) in cls.PYTHON_TYPES
+        return type(obj) is cls.PYTHON_TYPE
 
-    def __init__(self, node_class):
-        super().__init__(node_class)
-        self._type = 'integer'
-
-    def add_schema(self, schema):
-        super().add_schema(schema)
-        if schema.get('type') == 'number':
-            self._type = 'number'
-
-    def add_object(self, obj):
-        super().add_object(obj)
-        if isinstance(obj, float):
-            self._type = 'number'
-
-    def to_schema(self):
-        schema = super().to_schema()
-        schema['type'] = self._type
-        return schema
 
 class CustomSchemaStrategy(TypedSchemaStrategy):
     def to_schema(self):
@@ -85,6 +74,7 @@ class CustomSchemaStrategy(TypedSchemaStrategy):
         schema["type"] = self.JS_TYPE
         schema["format"] = self.FORMAT
         return schema
+
 
 class DateTime(CustomSchemaStrategy):
     """
@@ -97,6 +87,7 @@ class DateTime(CustomSchemaStrategy):
     PYTHON_TYPE = datetime.datetime
     FORMAT = "date-time"
 
+
 class Date(CustomSchemaStrategy):
     """
     strategy for datetime.date schemas
@@ -107,6 +98,7 @@ class Date(CustomSchemaStrategy):
     JS_TYPE = "string"
     PYTHON_TYPE = datetime.date
     FORMAT = "date"
+
 
 class Duration(CustomSchemaStrategy):
     """
