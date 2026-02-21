@@ -38,6 +38,10 @@ class TestArrayList(base.SchemaNodeTestCase):
         self.add_object(["spam", "spam", "spam", "eggs", "spam"])
         self.assertResult({"type": "array", "items": {"type": "string"}})
 
+    def test_mixed_integers_and_floats(self):
+        self.add_object([1, 2, 3.5, 4, 5.0])
+        self.assertResult({"type": "array", "items": {"type": ["integer", "number"]}})
+
     def test_multitype(self):
         self.add_object([1, "2", None, False])
         self.assertResult(

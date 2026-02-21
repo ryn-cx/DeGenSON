@@ -11,7 +11,7 @@ class TestBasicTypes(base.SchemaNodeTestCase):
     def test_redundant_integer_type(self):
         self.add_object(1)
         self.add_object(1.1)
-        self.assertResult({"type": "number"})
+        self.assertResult({"type": ["integer", "number"]})
 
 
 class TestAnyOf(base.SchemaNodeTestCase):

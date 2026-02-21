@@ -1,10 +1,10 @@
 from degenson import SchemaBuilder
-from degenson.schema.strategies import SchemaStrategy, Number
+from degenson.schema.strategies import SchemaStrategy, Integer
 from . import base
 
 
-class MaxTenStrategy(Number):
-    KEYWORDS = tuple(list(Number.KEYWORDS) + ["maximum"])
+class MaxTenStrategy(Integer):
+    KEYWORDS = tuple(list(SchemaStrategy.KEYWORDS) + ["maximum"])
 
     def to_schema(self):
         schema = super().to_schema()

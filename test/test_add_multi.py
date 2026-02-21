@@ -16,7 +16,7 @@ class TestType(base.SchemaNodeTestCase):
     def test_redundant_integer_type(self):
         self.add_schema({"type": "integer"})
         self.add_schema({"type": "number"})
-        self.assertResult({"type": "number"})
+        self.assertResult({"type": ["integer", "number"]})
 
     def test_typeless(self):
         schema1 = {"title": "ambiguous schema"}
