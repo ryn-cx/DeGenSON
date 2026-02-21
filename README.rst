@@ -1,7 +1,7 @@
 GenSON
 ======
 
-**GenSON** is a powerful, user-friendly `JSON Schema`_ generator built in Python.
+**DeGenSON** is a fork of `GenSON <https://github.com/wolverdude/GenSON>`_ that adds additional schema strategies.
 
 .. note::
     This is *not* the Python equivalent of the `Java Genson library`_. If you are coming from Java and need to create JSON objects in Python, you want `Python's builtin json library`_.)
@@ -46,15 +46,15 @@ Installation
 CLI Tool
 --------
 
-The package includes a ``genson`` executable that allows you to access this functionality from the command line. For usage info, run with ``--help``:
+The package includes a ``degenson`` executable that allows you to access this functionality from the command line. For usage info, run with ``--help``:
 
 .. code-block:: bash
 
-    $ genson --help
+    $ degenson --help
 
 .. code-block::
 
-    usage: genson [-h] [--version] [-d DELIM] [-e ENCODING] [-i SPACES]
+    usage: degenson [-h] [--version] [-d DELIM] [-e ENCODING] [-i SPACES]
                   [-s SCHEMA] [-$ SCHEMA_URI]
                   ...
 
@@ -99,7 +99,7 @@ GenSON Python API
 
 .. code-block:: python
 
-    >>> from genson import SchemaBuilder
+    >>> from degenson import SchemaBuilder
 
     >>> builder = SchemaBuilder()
 
@@ -199,7 +199,7 @@ SchemaBuilder object interaction
 
 .. code-block:: python
 
-    >>> from genson import SchemaBuilder
+    >>> from degenson import SchemaBuilder
 
     >>> b1 = SchemaBuilder()
     >>> b1.add_schema({"type": "object", "properties": {
@@ -260,7 +260,7 @@ By default, GenSON always interprets arrays using list validation, but you can t
 
 .. code-block:: python
 
-    >>> from genson import SchemaBuilder
+    >>> from degenson import SchemaBuilder
 
     >>> builder = SchemaBuilder()
     >>> builder.add_object(['one', 1])
@@ -287,7 +287,7 @@ Support for patternProperties_ is new in version 1; however, since GenSON's defa
 
 .. code-block:: python
 
-    >>> from genson import SchemaBuilder
+    >>> from degenson import SchemaBuilder
 
     >>> builder = SchemaBuilder()
     >>> builder.add_schema({'type': 'object', 'patternProperties': {r'^\d+$': None}})
@@ -433,8 +433,8 @@ Here's some example code creating a number strategy that tracks the `minimum num
 
 .. code-block:: python
 
-    from genson import SchemaBuilder
-    from genson.schema.strategies import Number
+    from degenson import SchemaBuilder
+    from degenson.schema.strategies import Number
 
     class MinNumber(Number):
         # add 'minimum' to list of keywords
@@ -504,7 +504,7 @@ Note that the exclusive builder is much more particular.
     {'$schema': 'http://json-schema.org/schema#', 'type': 'integer', 'minimum': 5}
     >>> builder.add_object(None) # this is fine
     >>> picky_builder.add_object(None) # this fails
-    genson.schema.node.SchemaGenerationError: Could not find matching schema type for object: None
+    degenson.schema.node.SchemaGenerationError: Could not find matching schema type for object: None
 
 
 Contributing

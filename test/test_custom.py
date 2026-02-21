@@ -1,5 +1,5 @@
-from genson import SchemaBuilder
-from genson.schema.strategies import SchemaStrategy, Number
+from degenson import SchemaBuilder
+from degenson.schema.strategies import SchemaStrategy, Number
 from . import base
 
 

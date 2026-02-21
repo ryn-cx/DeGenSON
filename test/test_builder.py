@@ -1,5 +1,5 @@
 from . import base
-from genson import SchemaBuilder
+from degenson import SchemaBuilder
 
 SCHEMA_URI = "https://json-schema.org/draft/2020-12/schema"
 

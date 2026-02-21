@@ -45,7 +45,7 @@ class SchemaBuilder(metaclass=_MetaSchemaBuilder):
           given, it will use the value of the first available
           ``$schema`` keyword on an added schema or else the default:
           ``'http://json-schema.org/schema#'``. A value of ``False`` or
-          ``None`` will direct GenSON to leave out the ``"$schema"``
+          ``None`` will direct DeGenSON to leave out the ``"$schema"``
           keyword.
         """
         if schema_uri is None or schema_uri is False:
@@ -147,8 +147,8 @@ class SchemaBuilder(metaclass=_MetaSchemaBuilder):
 class Schema(SchemaBuilder):
     def __init__(self):
         warn(
-            "genson.Schema is deprecated in v1.0, and it may be "
-            "removed in future versions. Use genson.SchemaBuilder"
+            "degenson.Schema is deprecated in v1.0, and it may be "
+            "removed in future versions. Use degenson.SchemaBuilder"
             "instead.",
             PendingDeprecationWarning,
         )

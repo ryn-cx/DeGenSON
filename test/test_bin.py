@@ -3,12 +3,12 @@ import json
 import os
 import sys
 from subprocess import Popen, PIPE
-from genson import SchemaBuilder
+from degenson import SchemaBuilder
 
 BASE_SCHEMA = {"$schema": SchemaBuilder.DEFAULT_URI}
 FIXTURE_PATH = os.path.join(os.path.dirname(__file__), "fixtures")
 SHORT_USAGE = """\
-usage: genson [-h] [--version] [-d DELIM] [-e ENCODING] [-i SPACES]
+usage: degenson [-h] [--version] [-d DELIM] [-e ENCODING] [-i SPACES]
               [-s SCHEMA] [-$ SCHEMA_URI]
               ..."""
 
@@ -18,15 +18,15 @@ def fixture(filename):
 
 
 def stderr_message(message):
-    return "{}\ngenson: error: {}\n".format(SHORT_USAGE, message)
+    return "{}\ndegenson: error: {}\n".format(SHORT_USAGE, message)
 
 
 def run(args=tuple(), stdin_data=None):
     """
-    Run the ``genson`` executable as a subprocess and return
+    Run the ``degenson`` executable as a subprocess and return
     (stdout, stderr).
     """
-    full_args = [sys.executable, "-m", "genson"]
+    full_args = [sys.executable, "-m", "degenson"]
     full_args.extend(args)
     env = os.environ.copy()
     env["COLUMNS"] = "80"  # set width for deterministic text wrapping
