@@ -7,11 +7,12 @@ class Object(SchemaStrategy):
     """
     object schema strategy
     """
-    KEYWORDS = ('type', 'properties', 'patternProperties', 'required')
+
+    KEYWORDS = ("type", "properties", "patternProperties", "required")
 
     @staticmethod
     def match_schema(schema):
-        return schema.get('type') == 'object'
+        return schema.get("type") == "object"
 
     @staticmethod
     def match_object(obj):
@@ -27,18 +28,18 @@ class Object(SchemaStrategy):
 
     def add_schema(self, schema):
         super().add_schema(schema)
-        if 'properties' in schema:
-            for prop, subschema in schema['properties'].items():
+        if "properties" in schema:
+            for prop, subschema in schema["properties"].items():
                 subnode = self._properties[prop]
                 if subschema is not None:
                     subnode.add_schema(subschema)
-        if 'patternProperties' in schema:
-            for pattern, subschema in schema['patternProperties'].items():
+        if "patternProperties" in schema:
+            for pattern, subschema in schema["patternProperties"].items():
                 subnode = self._pattern_properties[pattern]
                 if subschema is not None:
                     subnode.add_schema(subschema)
-        if 'required' in schema:
-            required = set(schema['required'])
+        if "required" in schema:
+            required = set(schema["required"])
             if not required:
                 self._include_empty_required = True
             if self._required is None:
@@ -79,15 +80,15 @@ class Object(SchemaStrategy):
 
     def to_schema(self):
         schema = super().to_schema()
-        schema['type'] = 'object'
+        schema["type"] = "object"
         if self._properties:
-            schema['properties'] = self._properties_to_schema(
-                self._properties)
+            schema["properties"] = self._properties_to_schema(self._properties)
         if self._pattern_properties:
-            schema['patternProperties'] = self._properties_to_schema(
-                self._pattern_properties)
+            schema["patternProperties"] = self._properties_to_schema(
+                self._pattern_properties
+            )
         if self._required or self._include_empty_required:
-            schema['required'] = sorted(self._required)
+            schema["required"] = sorted(self._required)
         return schema
 
     def _properties_to_schema(self, properties):

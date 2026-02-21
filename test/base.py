@@ -3,11 +3,10 @@ import unittest
 import jsonschema
 from genson import SchemaNode, SchemaBuilder
 
-PYTHON_VERSION = sys.version[:sys.version.find(' ')]
+PYTHON_VERSION = sys.version[: sys.version.find(" ")]
 
 
 class BaseTestCase(unittest.TestCase):
-
     def setUp(self):
         self.builder = self.CLASS()
         self._objects = []
@@ -33,8 +32,10 @@ class BaseTestCase(unittest.TestCase):
 
     def assertResult(self, expected, enforceUserContract=True):
         self.assertEqual(
-            expected, self.builder.to_schema(),
-            'Generated schema (below) does not match expected (above)')
+            expected,
+            self.builder.to_schema(),
+            "Generated schema (below) does not match expected (above)",
+        )
         if enforceUserContract:
             self.assertUserContract()
 

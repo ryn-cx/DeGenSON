@@ -10,7 +10,7 @@ class Typeless(SchemaStrategy):
 
     @classmethod
     def match_schema(cls, schema):
-        return 'type' not in schema
+        return "type" not in schema
 
     @classmethod
     def match_object(cls, obj):
@@ -21,7 +21,8 @@ class Null(TypedSchemaStrategy):
     """
     strategy for null schemas
     """
-    JS_TYPE = 'null'
+
+    JS_TYPE = "null"
     PYTHON_TYPE = type(None)
 
 
@@ -29,7 +30,8 @@ class Boolean(TypedSchemaStrategy):
     """
     strategy for boolean schemas
     """
-    JS_TYPE = 'boolean'
+
+    JS_TYPE = "boolean"
     PYTHON_TYPE = bool
 
 
@@ -37,7 +39,8 @@ class String(TypedSchemaStrategy):
     """
     strategy for string schemas - works for ascii and unicode strings
     """
-    JS_TYPE = 'string'
+
+    JS_TYPE = "string"
     PYTHON_TYPE = str
 
 
@@ -47,12 +50,13 @@ class Number(SchemaStrategy):
     converts from `integer` to `number` when a float object or a
     number schema is added
     """
-    JS_TYPES = ('integer', 'number')
+
+    JS_TYPES = ("integer", "number")
     PYTHON_TYPES = (int, float)
 
     @classmethod
     def match_schema(cls, schema):
-        return schema.get('type') in cls.JS_TYPES
+        return schema.get("type") in cls.JS_TYPES
 
     @classmethod
     def match_object(cls, obj):
@@ -61,19 +65,19 @@ class Number(SchemaStrategy):
 
     def __init__(self, node_class):
         super().__init__(node_class)
-        self._type = 'integer'
+        self._type = "integer"
 
     def add_schema(self, schema):
         super().add_schema(schema)
-        if schema.get('type') == 'number':
-            self._type = 'number'
+        if schema.get("type") == "number":
+            self._type = "number"
 
     def add_object(self, obj):
         super().add_object(obj)
         if isinstance(obj, float):
-            self._type = 'number'
+            self._type = "number"
 
     def to_schema(self):
         schema = super().to_schema()
-        schema['type'] = self._type
+        schema["type"] = self._type
         return schema

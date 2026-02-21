@@ -4,16 +4,16 @@ from . import base
 
 
 class MaxTenStrategy(Number):
-    KEYWORDS = tuple(list(Number.KEYWORDS) + ['maximum'])
+    KEYWORDS = tuple(list(Number.KEYWORDS) + ["maximum"])
 
     def to_schema(self):
         schema = super().to_schema()
-        schema['maximum'] = 10
+        schema["maximum"] = 10
         return schema
 
 
 class FalseStrategy(SchemaStrategy):
-    KEYWORDS = tuple(list(SchemaStrategy.KEYWORDS) + ['const'])
+    KEYWORDS = tuple(list(SchemaStrategy.KEYWORDS) + ["const"])
 
     @classmethod
     def match_schema(self, schema):
@@ -25,8 +25,8 @@ class FalseStrategy(SchemaStrategy):
 
     def to_schema(self):
         schema = super().to_schema()
-        schema['type'] = 'boolean'
-        schema['const'] = False
+        schema["type"] = "boolean"
+        schema["const"] = False
         return schema
 
 
@@ -43,17 +43,23 @@ class TestExtraStrategies(base.SchemaNodeTestCase):
 
     def test_add_object(self):
         self.add_object(5)
-        self.assertResult({
-            '$schema': 'http://json-schema.org/schema#',
-            'type': 'integer',
-            'maximum': 10})
+        self.assertResult(
+            {
+                "$schema": "http://json-schema.org/schema#",
+                "type": "integer",
+                "maximum": 10,
+            }
+        )
 
     def test_add_schema(self):
-        self.add_schema({'type': 'integer'})
-        self.assertResult({
-            '$schema': 'http://json-schema.org/schema#',
-            'type': 'integer',
-            'maximum': 10})
+        self.add_schema({"type": "integer"})
+        self.assertResult(
+            {
+                "$schema": "http://json-schema.org/schema#",
+                "type": "integer",
+                "maximum": 10,
+            }
+        )
 
 
 class TestClobberStrategies(base.SchemaNodeTestCase):
@@ -61,14 +67,22 @@ class TestClobberStrategies(base.SchemaNodeTestCase):
 
     def test_add_object(self):
         self.add_object("Any Norwegian Jarlsberger?")
-        self.assertResult({
-            '$schema': 'http://json-schema.org/schema#',
-            'type': 'boolean',
-            'const': False}, enforceUserContract=False)
+        self.assertResult(
+            {
+                "$schema": "http://json-schema.org/schema#",
+                "type": "boolean",
+                "const": False,
+            },
+            enforceUserContract=False,
+        )
 
     def test_add_schema(self):
-        self.add_schema({'type': 'string'})
-        self.assertResult({
-            '$schema': 'http://json-schema.org/schema#',
-            'type': 'boolean',
-            'const': False}, enforceUserContract=False)
+        self.add_schema({"type": "string"})
+        self.assertResult(
+            {
+                "$schema": "http://json-schema.org/schema#",
+                "type": "boolean",
+                "const": False,
+            },
+            enforceUserContract=False,
+        )

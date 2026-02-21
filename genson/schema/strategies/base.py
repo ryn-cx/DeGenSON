@@ -15,7 +15,8 @@ class SchemaStrategy:
     * to_schema
     * __eq__
     """
-    KEYWORDS = ('type',)
+
+    KEYWORDS = ("type",)
 
     @classmethod
     def match_schema(cls, schema):
@@ -39,9 +40,12 @@ class SchemaStrategy:
             elif keyword not in self._extra_keywords:
                 self._extra_keywords[keyword] = value
             elif self._extra_keywords[keyword] != value:
-                warn(('Schema incompatible. Keyword {0!r} has conflicting '
-                      'values ({1!r} vs. {2!r}). Using {1!r}').format(
-                          keyword, self._extra_keywords[keyword], value))
+                warn(
+                    (
+                        "Schema incompatible. Keyword {0!r} has conflicting "
+                        "values ({1!r} vs. {2!r}). Using {1!r}"
+                    ).format(keyword, self._extra_keywords[keyword], value)
+                )
 
     def add_object(self, obj):
         pass
@@ -50,9 +54,8 @@ class SchemaStrategy:
         return copy(self._extra_keywords)
 
     def __eq__(self, other):
-        """ Required for SchemaBuilder.__eq__ to work properly """
-        return (isinstance(other, self.__class__)
-                and self.__dict__ == other.__dict__)
+        """Required for SchemaBuilder.__eq__ to work properly"""
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
 
 
 class TypedSchemaStrategy(SchemaStrategy):
@@ -66,7 +69,7 @@ class TypedSchemaStrategy(SchemaStrategy):
 
     @classmethod
     def match_schema(cls, schema):
-        return schema.get('type') == cls.JS_TYPE
+        return schema.get("type") == cls.JS_TYPE
 
     @classmethod
     def match_object(cls, obj):
@@ -74,5 +77,5 @@ class TypedSchemaStrategy(SchemaStrategy):
 
     def to_schema(self):
         schema = super().to_schema()
-        schema['type'] = self.JS_TYPE
+        schema["type"] = self.JS_TYPE
         return schema

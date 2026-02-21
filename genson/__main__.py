@@ -13,7 +13,7 @@ class CLI:
 
     def run(self):
         if not self.args.schema and not self.args.object:
-            self.fail('noting to do - no schemas or objects given')
+            self.fail("noting to do - no schemas or objects given")
         self.add_schemas()
         self.add_objects()
         self.print_output()
@@ -35,53 +35,85 @@ class CLI:
         self.parser.error(message)
 
     def _make_parser(self, prog=None):
-        file_type = argparse.FileType('r', encoding=self._get_encoding())
+        file_type = argparse.FileType("r", encoding=self._get_encoding())
 
         self.parser = argparse.ArgumentParser(
             add_help=False,
             prog=prog,
             description="""Generate one, unified JSON Schema from one or more
             JSON objects and/or JSON Schemas. Compatible with JSON-Schema Draft
-            4 and above.""")
+            4 and above.""",
+        )
 
         self.parser.add_argument(
-            '-h', '--help', action='help', default=argparse.SUPPRESS,
-            help='Show this help message and exit.')
+            "-h",
+            "--help",
+            action="help",
+            default=argparse.SUPPRESS,
+            help="Show this help message and exit.",
+        )
         self.parser.add_argument(
-            '--version', action='version', default=argparse.SUPPRESS,
-            version='%(prog)s {}'.format(__version__),
-            help='Show version number and exit.')
+            "--version",
+            action="version",
+            default=argparse.SUPPRESS,
+            version="%(prog)s {}".format(__version__),
+            help="Show version number and exit.",
+        )
         self.parser.add_argument(
-            '-d', '--delimiter', metavar='DELIM',
+            "-d",
+            "--delimiter",
+            metavar="DELIM",
             help="""Set a delimiter. Use this option if the input files
             contain multiple JSON objects/schemas. You can pass any string. A
             few cases ('newline', 'tab', 'space') will get converted to a
             whitespace character. If this option is omitted, the parser will
-            try to auto-detect boundaries.""")
+            try to auto-detect boundaries.""",
+        )
         self.parser.add_argument(
-            '-e', '--encoding', type=str, metavar='ENCODING',
+            "-e",
+            "--encoding",
+            type=str,
+            metavar="ENCODING",
             help="""Use ENCODING instead of the default system encoding
             when reading files. ENCODING must be a valid codec name or
-            alias.""")
+            alias.""",
+        )
         self.parser.add_argument(
-            '-i', '--indent', type=int, metavar='SPACES',
-            help="""Pretty-print the output, indenting SPACES spaces.""")
+            "-i",
+            "--indent",
+            type=int,
+            metavar="SPACES",
+            help="""Pretty-print the output, indenting SPACES spaces.""",
+        )
         self.parser.add_argument(
-            '-s', '--schema', action='append', default=[], type=file_type,
+            "-s",
+            "--schema",
+            action="append",
+            default=[],
+            type=file_type,
             help="""File containing a JSON Schema (can be specified multiple
-            times to merge schemas).""")
+            times to merge schemas).""",
+        )
         self.parser.add_argument(
-            '-$', '--schema-uri', metavar='SCHEMA_URI', dest='schema_uri',
+            "-$",
+            "--schema-uri",
+            metavar="SCHEMA_URI",
+            dest="schema_uri",
             default=SchemaBuilder.DEFAULT_URI,
             help="""The value of the '$schema' keyword (defaults to {default!r}
             or can be specified in a schema with the -s option). If {null!r} is
             passed, the "$schema" keyword will not be included in the
-            result.""".format(default=SchemaBuilder.DEFAULT_URI,
-                              null=SchemaBuilder.NULL_URI))
+            result.""".format(
+                default=SchemaBuilder.DEFAULT_URI, null=SchemaBuilder.NULL_URI
+            ),
+        )
         self.parser.add_argument(
-            'object', nargs=argparse.REMAINDER, type=file_type,
+            "object",
+            nargs=argparse.REMAINDER,
+            type=file_type,
             help="""Files containing JSON objects (defaults to stdin if no
-            arguments are passed).""")
+            arguments are passed).""",
+        )
 
     def _get_encoding(self):
         """
@@ -89,7 +121,7 @@ class CLI:
         defining FileType args
         """
         parser = argparse.ArgumentParser(add_help=False)
-        parser.add_argument('-e', '--encoding', type=str)
+        parser.add_argument("-e", "--encoding", type=str)
         args, _ = parser.parse_known_args()
         return args.encoding
 
@@ -105,23 +137,23 @@ class CLI:
         """
         manage special conversions for difficult bash characters
         """
-        if self.args.delimiter == 'newline':
-            self.args.delimiter = '\n'
-        elif self.args.delimiter == 'tab':
-            self.args.delimiter = '\t'
-        elif self.args.delimiter == 'space':
-            self.args.delimiter = ' '
+        if self.args.delimiter == "newline":
+            self.args.delimiter = "\n"
+        elif self.args.delimiter == "tab":
+            self.args.delimiter = "\t"
+        elif self.args.delimiter == "space":
+            self.args.delimiter = " "
 
     def _call_with_json_from_fp(self, method, fp):
         for json_string in self._get_json_strings(fp.read().strip()):
             try:
                 json_obj = json.loads(json_string)
             except json.JSONDecodeError as err:
-                self.fail('invalid JSON in {}: {}'.format(fp.name, err))
+                self.fail("invalid JSON in {}: {}".format(fp.name, err))
             method(json_obj)
 
     def _get_json_strings(self, raw_text):
-        if self.args.delimiter is None or self.args.delimiter == '':
+        if self.args.delimiter is None or self.args.delimiter == "":
             json_strings = self._detect_json_strings(raw_text)
         else:
             json_strings = raw_text.split(self.args.delimiter)
@@ -136,10 +168,10 @@ class CLI:
         objects. Unfortunately, it has to match *something*, so at least
         one character must be removed and replaced.
         """
-        strings = re.split(r'}\s*(?={)', raw_text)
+        strings = re.split(r"}\s*(?={)", raw_text)
 
         # put back the stripped character
-        json_strings = [string + '}' for string in strings[:-1]]
+        json_strings = [string + "}" for string in strings[:-1]]
 
         # the last one doesn't need to be modified
         json_strings.append(strings[-1])
@@ -152,4 +184,4 @@ def main():
 
 
 if __name__ == "__main__":
-    CLI('genson').run()
+    CLI("genson").run()

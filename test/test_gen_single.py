@@ -2,7 +2,6 @@ from . import base
 
 
 class TestBasicTypes(base.SchemaNodeTestCase):
-
     def test_no_object(self):
         self.assertResult({})
 
@@ -28,7 +27,6 @@ class TestBasicTypes(base.SchemaNodeTestCase):
 
 
 class TestArrayList(base.SchemaNodeTestCase):
-
     def setUp(self):
         base.SchemaNodeTestCase.setUp(self)
 
@@ -42,31 +40,34 @@ class TestArrayList(base.SchemaNodeTestCase):
 
     def test_multitype(self):
         self.add_object([1, "2", None, False])
-        self.assertResult({
-            "type": "array",
-            "items": {
-                "type": ["boolean", "integer", "null", "string"]}
-        })
+        self.assertResult(
+            {
+                "type": "array",
+                "items": {"type": ["boolean", "integer", "null", "string"]},
+            }
+        )
         self.assertObjectValidates([False, None, "2", 1])
 
     def test_nested(self):
-        self.add_object([
-            ["surprise"],
-            ["fear", "surprise"],
-            ["fear", "surprise", "ruthless efficiency"],
-            ["fear", "surprise", "ruthless efficiency",
-             "an almost fanatical devotion to the Pope"]
-        ])
-        self.assertResult({
-            "type": "array",
-            "items": {
-                "type": "array",
-                "items": {"type": "string"}}
-        })
+        self.add_object(
+            [
+                ["surprise"],
+                ["fear", "surprise"],
+                ["fear", "surprise", "ruthless efficiency"],
+                [
+                    "fear",
+                    "surprise",
+                    "ruthless efficiency",
+                    "an almost fanatical devotion to the Pope",
+                ],
+            ]
+        )
+        self.assertResult(
+            {"type": "array", "items": {"type": "array", "items": {"type": "string"}}}
+        )
 
 
 class TestArrayTuple(base.SchemaNodeTestCase):
-
     def setUp(self):
         base.SchemaNodeTestCase.setUp(self)
 
@@ -87,120 +88,141 @@ class TestArrayTuple(base.SchemaNodeTestCase):
 
         self.add_object([1, "2", "3", None, False])
 
-        self.assertResult({
-            "type": "array",
-            "items": [
-                {"type": "integer"},
-                {"type": "string"},
-                {"type": "string"},
-                {"type": "null"},
-                {"type": "boolean"}]
-        })
+        self.assertResult(
+            {
+                "type": "array",
+                "items": [
+                    {"type": "integer"},
+                    {"type": "string"},
+                    {"type": "string"},
+                    {"type": "null"},
+                    {"type": "boolean"},
+                ],
+            }
+        )
         self.assertObjectDoesNotValidate([1, 2, "3", None, False])
 
     def test_nested(self):
-        self.add_schema(
-            {"type": "array", "items": {"type": "array", "items": []}})
+        self.add_schema({"type": "array", "items": {"type": "array", "items": []}})
 
-        self.add_object([
-            ["surprise"],
-            ["fear", "surprise"],
-            ["fear", "surprise", "ruthless efficiency"],
-            ["fear", "surprise", "ruthless efficiency",
-             "an almost fanatical devotion to the Pope"]
-        ])
-        self.assertResult({
-            "type": "array",
-            "items": {
+        self.add_object(
+            [
+                ["surprise"],
+                ["fear", "surprise"],
+                ["fear", "surprise", "ruthless efficiency"],
+                [
+                    "fear",
+                    "surprise",
+                    "ruthless efficiency",
+                    "an almost fanatical devotion to the Pope",
+                ],
+            ]
+        )
+        self.assertResult(
+            {
                 "type": "array",
-                "items": [
-                    {"type": "string"},
-                    {"type": "string"},
-                    {"type": "string"},
-                    {"type": "string"}
-                ]
+                "items": {
+                    "type": "array",
+                    "items": [
+                        {"type": "string"},
+                        {"type": "string"},
+                        {"type": "string"},
+                        {"type": "string"},
+                    ],
+                },
             }
-        })
+        )
 
 
 class TestObject(base.SchemaNodeTestCase):
-
     def test_empty_object(self):
         self.add_object({})
         self.assertResult({"type": "object"})
 
     def test_basic_object(self):
-        self.add_object({
-            "Red Windsor": "Normally, but today the van broke down.",
-            "Stilton": "Sorry.",
-            "Gruyere": False})
-        self.assertResult({
-            "required": ["Gruyere", "Red Windsor", "Stilton"],
-            "type": "object",
-            "properties": {
-                "Red Windsor": {"type": "string"},
-                "Gruyere": {"type": "boolean"},
-                "Stilton": {"type": "string"}
+        self.add_object(
+            {
+                "Red Windsor": "Normally, but today the van broke down.",
+                "Stilton": "Sorry.",
+                "Gruyere": False,
             }
-        })
+        )
+        self.assertResult(
+            {
+                "required": ["Gruyere", "Red Windsor", "Stilton"],
+                "type": "object",
+                "properties": {
+                    "Red Windsor": {"type": "string"},
+                    "Gruyere": {"type": "boolean"},
+                    "Stilton": {"type": "string"},
+                },
+            }
+        )
 
 
 class TestComplex(base.SchemaNodeTestCase):
-
     def test_array_in_object(self):
         self.add_object({"a": "b", "c": [1, 2, 3]})
-        self.assertResult({
-            "required": ["a", "c"],
-            "type": "object",
-            "properties": {
-                "a": {"type": "string"},
-                "c": {
-                    "type": "array",
-                    "items": {"type": "integer"}
-                }
+        self.assertResult(
+            {
+                "required": ["a", "c"],
+                "type": "object",
+                "properties": {
+                    "a": {"type": "string"},
+                    "c": {"type": "array", "items": {"type": "integer"}},
+                },
             }
-        })
+        )
 
     def test_object_in_array(self):
-        self.add_object([
-            {"name": "Sir Lancelot of Camelot",
-             "quest": "to seek the Holy Grail",
-             "favorite colour": "blue"},
-            {"name": "Sir Robin of Camelot",
-             "quest": "to seek the Holy Grail",
-             "capitol of Assyria": None}])
-        self.assertResult({
-            "type": "array",
-            "items": {
-                "type": "object",
-                "required": ["name", "quest"],
-                "properties": {
-                    "quest": {"type": "string"},
-                    "name": {"type": "string"},
-                    "favorite colour": {"type": "string"},
-                    "capitol of Assyria": {"type": "null"}
-                }
+        self.add_object(
+            [
+                {
+                    "name": "Sir Lancelot of Camelot",
+                    "quest": "to seek the Holy Grail",
+                    "favorite colour": "blue",
+                },
+                {
+                    "name": "Sir Robin of Camelot",
+                    "quest": "to seek the Holy Grail",
+                    "capitol of Assyria": None,
+                },
+            ]
+        )
+        self.assertResult(
+            {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "required": ["name", "quest"],
+                    "properties": {
+                        "quest": {"type": "string"},
+                        "name": {"type": "string"},
+                        "favorite colour": {"type": "string"},
+                        "capitol of Assyria": {"type": "null"},
+                    },
+                },
             }
-        })
+        )
 
     def test_three_deep(self):
         self.add_object({"matryoshka": {"design": {"principle": "FTW!"}}})
-        self.assertResult({
-            "type": "object",
-            "required": ["matryoshka"],
-            "properties": {
-                "matryoshka": {
-                    "type": "object",
-                    "required": ["design"],
-                    "properties": {
-                        "design": {
-                            "type": "object",
-                            "required": ["principle"],
-                            "properties": {
-                                "principle": {"type": "string"}
+        self.assertResult(
+            {
+                "type": "object",
+                "required": ["matryoshka"],
+                "properties": {
+                    "matryoshka": {
+                        "type": "object",
+                        "required": ["design"],
+                        "properties": {
+                            "design": {
+                                "type": "object",
+                                "required": ["principle"],
+                                "properties": {"principle": {"type": "string"}},
                             }
-                        }
+                        },
                     }
-                }
+                },
             }
-        })
+        )
