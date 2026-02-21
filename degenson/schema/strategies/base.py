@@ -79,3 +79,19 @@ class TypedSchemaStrategy(SchemaStrategy):
         schema = super().to_schema()
         schema["type"] = self.JS_TYPE
         return schema
+
+
+class FormattedSchemaStrategy(TypedSchemaStrategy):
+    """
+    base schema strategy class for scalar types. Subclasses define
+    these three class constants:
+
+    * `JS_TYPE`: a valid value of the `type` keyword
+    * `PYTHON_TYPE`: Python type objects - can be a tuple of types
+    * `FORMAT`: a valid value of the `format` keyword
+    """
+
+    def to_schema(self):
+        schema = super().to_schema()
+        schema["format"] = self.FORMAT
+        return schema

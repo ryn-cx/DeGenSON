@@ -1,4 +1,9 @@
-from .base import SchemaStrategy, TypedSchemaStrategy
+import datetime
+import ipaddress
+import re
+import uuid
+
+from .base import SchemaStrategy, TypedSchemaStrategy, FormattedSchemaStrategy
 
 
 class Typeless(SchemaStrategy):
@@ -65,3 +70,99 @@ class Integer(TypedSchemaStrategy):
     def match_object(cls, obj):
         # cannot use isinstance() because boolean is a subtype of int
         return type(obj) is cls.PYTHON_TYPE
+
+
+class DateTime(FormattedSchemaStrategy):
+    """
+    strategy for datetime.datetime schemas
+
+    Not JSON compliant.
+    """
+
+    JS_TYPE = "string"
+    PYTHON_TYPE = datetime.datetime
+    FORMAT = "date-time"
+
+
+class Date(FormattedSchemaStrategy):
+    """
+    strategy for datetime.date schemas
+
+    Not JSON compliant.
+    """
+
+    JS_TYPE = "string"
+    PYTHON_TYPE = datetime.date
+    FORMAT = "date"
+
+
+class Duration(FormattedSchemaStrategy):
+    """
+    strategy for datetime.timedelta schemas
+
+    Not JSON compliant.
+    """
+
+    JS_TYPE = "string"
+    PYTHON_TYPE = datetime.timedelta
+    FORMAT = "duration"
+
+
+class Time(FormattedSchemaStrategy):
+    """
+    strategy for datetime.time schemas
+
+    Not JSON compliant.
+    """
+
+    JS_TYPE = "string"
+    PYTHON_TYPE = datetime.time
+    FORMAT = "time"
+
+
+class IPv4Address(FormattedSchemaStrategy):
+    """
+    strategy for ipaddress.IPv4Address schemas
+
+    Not JSON compliant.
+    """
+
+    JS_TYPE = "string"
+    PYTHON_TYPE = ipaddress.IPv4Address
+    FORMAT = "ipv4"
+
+
+class IPv6Address(FormattedSchemaStrategy):
+    """
+    strategy for ipaddress.IPv6Address schemas
+
+    Not JSON compliant.
+    """
+
+    JS_TYPE = "string"
+    PYTHON_TYPE = ipaddress.IPv6Address
+    FORMAT = "ipv6"
+
+
+class UUID(FormattedSchemaStrategy):
+    """
+    strategy for uuid.UUID schemas
+
+    Not JSON compliant.
+    """
+
+    JS_TYPE = "string"
+    PYTHON_TYPE = uuid.UUID
+    FORMAT = "uuid"
+
+
+class Regex(FormattedSchemaStrategy):
+    """
+    strategy for re.Pattern schemas
+
+    Not JSON compliant.
+    """
+
+    JS_TYPE = "string"
+    PYTHON_TYPE = re.Pattern
+    FORMAT = "regex"
