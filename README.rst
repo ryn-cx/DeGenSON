@@ -1,7 +1,68 @@
+DeGenSON
+========
+
+**DeGenSON** is a fork of `GenSON <https://github.com/wolverdude/GenSON>`_ that adds additional schema strategies for Python types that aren't part of standard JSON but map directly to JSON Schema ``format`` values.
+
+When DeGenSON encounters one of these Python types, it generates a schema with ``"type": "string"`` and the appropriate ``"format"`` keyword. This allows you to generate richer schemas from Python objects that use types like ``datetime``, ``uuid``, and ``ipaddress``.
+
+Additional Strategies
+---------------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 10 15 40
+
+   * - Python Type
+     - Type
+     - Format
+     - Example Value
+   * - ``datetime.datetime``
+     - ``string``
+     - ``date-time``
+     - ``2018-11-13T20:20:39+00:00``
+   * - ``datetime.date``
+     - ``string``
+     - ``date``
+     - ``2018-11-13``
+   * - ``datetime.time``
+     - ``string``
+     - ``time``
+     - ``20:20:39+00:00``
+   * - ``datetime.timedelta``
+     - ``string``
+     - ``duration``
+     - ``P3D``
+   * - ``ipaddress.IPv4Address``
+     - ``string``
+     - ``ipv4``
+     - ``192.168.1.1``
+   * - ``ipaddress.IPv6Address``
+     - ``string``
+     - ``ipv6``
+     - ``::1``
+   * - ``uuid.UUID``
+     - ``string``
+     - ``uuid``
+     - ``3e4666bf-d5e5-4aa7-b8ce-cefe41c7568a``
+   * - ``re.Pattern``
+     - ``string``
+     - ``regex``
+     - ``\d+``
+
+.. code-block:: python
+
+    >>> import datetime
+    >>> from degenson import SchemaBuilder
+
+    >>> builder = SchemaBuilder()
+    >>> builder.add_object(datetime.date(2018, 11, 13))
+    >>> builder.to_schema()
+    {'$schema': 'http://json-schema.org/schema#', 'type': 'string', 'format': 'date'}
+
 GenSON
 ======
 
-**DeGenSON** is a fork of `GenSON <https://github.com/wolverdude/GenSON>`_ that adds additional schema strategies.
+**GenSON** is a powerful, user-friendly `JSON Schema`_ generator built in Python.
 
 .. note::
     This is *not* the Python equivalent of the `Java Genson library`_. If you are coming from Java and need to create JSON objects in Python, you want `Python's builtin json library`_.)
