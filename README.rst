@@ -8,7 +8,7 @@ Additional Strategies
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 10 15 40
+   :widths: 30 20 20
 
    * - Python Type
      - JSON Schema Type
