@@ -38,6 +38,9 @@ Additional Strategies
      - ``string``
      - ``regex``
 
+Example
+-------
+
 .. code-block:: python
 
     >>> import datetime
