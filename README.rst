@@ -48,7 +48,8 @@ Example
 
     >>> builder = SchemaBuilder()
     >>> builder.add_object(datetime.date(2018, 11, 13))
-    >>> builder.to_schema()
+    >>> schema = builder.to_schema()
+    >>> print(schema)
     {'$schema': 'http://json-schema.org/schema#', 'type': 'string', 'format': 'date'}
 
 GenSON
