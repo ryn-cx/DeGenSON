@@ -1,7 +1,7 @@
 DeGenSON
 ========
 
-**DeGenSON** is a fork of `GenSON <https://github.com/wolverdude/GenSON>`_ that adds additional schema strategies for Python types that aren't part of standard JSON but map directly to JSON Schema ``format`` values.
+**DeGenSON** is a fork of `GenSON <https://github.com/wolverdude/GenSON>`_ that adds additional schema strategies for Python types that map directly to JSON Schema formats.
 
 Additional Strategies
 ---------------------
