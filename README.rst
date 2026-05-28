@@ -45,7 +45,7 @@ Installation
 ------------
 .. code-block:: bash
 
-    $ uv add git+https://github.com/ryn-cx/DeGenSON
+    uv add git+https://github.com/ryn-cx/DeGenSON
 
 Example
 -------
