@@ -3,6 +3,9 @@ DeGenSON
 
 **DeGenSON** is a fork of `GenSON <https://github.com/wolverdude/GenSON>`_ that adds additional schema strategies for Python types that map directly to JSON Schema formats.
 
+
+
+
 Supported Additional Schema Strategies
 --------------------------------------
 
@@ -37,6 +40,12 @@ Supported Additional Schema Strategies
    * - ``re.Pattern``
      - ``string``
      - ``regex``
+
+Installation
+------------
+.. code-block:: bash
+
+    $ uv add git+https://github.com/ryn-cx/DeGenSON
 
 Example
 -------
