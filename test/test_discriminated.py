@@ -15,13 +15,18 @@ class TestAddObject(DiscriminatedBuilderTestCase):
         self.assertResult(
             {
                 "$schema": "http://json-schema.org/schema#",
-                "type": "object",
-                "properties": {
-                    "type": {"const": "cat"},
-                    "meow": {"type": "boolean"},
-                },
-                "required": ["meow", "type"],
-                "title": "cat",
+                "oneOf": [
+                    {
+                        "type": "object",
+                        "properties": {
+                            "type": {"const": "cat"},
+                            "meow": {"type": "boolean"},
+                        },
+                        "required": ["meow", "type"],
+                        "title": "cat",
+                    },
+                ],
+                "discriminator": {"propertyName": "type"},
             }
         )
 
@@ -61,14 +66,19 @@ class TestAddObject(DiscriminatedBuilderTestCase):
         self.assertResult(
             {
                 "$schema": "http://json-schema.org/schema#",
-                "type": "object",
-                "properties": {
-                    "type": {"const": "cat"},
-                    "meow": {"type": "boolean"},
-                    "lives": {"type": "integer"},
-                },
-                "required": ["meow", "type"],
-                "title": "cat",
+                "oneOf": [
+                    {
+                        "type": "object",
+                        "properties": {
+                            "type": {"const": "cat"},
+                            "meow": {"type": "boolean"},
+                            "lives": {"type": "integer"},
+                        },
+                        "required": ["meow", "type"],
+                        "title": "cat",
+                    },
+                ],
+                "discriminator": {"propertyName": "type"},
             }
         )
 

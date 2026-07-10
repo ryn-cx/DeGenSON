@@ -59,12 +59,9 @@ class DiscriminatedObject(SchemaStrategy):
             variant["title"] = str(value)
             variants.append(variant)
 
-        if len(variants) == 1:
-            schema = variants[0]
-        else:
-            schema = {
-                "oneOf": variants,
-                "discriminator": {"propertyName": self.DISCRIMINATOR_KEY},
-            }
+        schema = {
+            "oneOf": variants,
+            "discriminator": {"propertyName": self.DISCRIMINATOR_KEY},
+        }
         schema.update(self._extra_keywords)
         return schema
