@@ -2,6 +2,7 @@ import json
 from warnings import warn
 from .node import SchemaNode
 from .strategies import BASIC_SCHEMA_STRATEGIES
+from .strategies.discriminated import DiscriminatedObject
 
 
 class _MetaSchemaBuilder(type):
@@ -142,6 +143,29 @@ class SchemaBuilder(metaclass=_MetaSchemaBuilder):
             return {}
         else:
             return {"$schema": self.schema_uri or self.DEFAULT_URI}
+
+
+def discriminated_builder(discriminator_key):
+    """Return a ``SchemaBuilder`` that discriminates objects on a property.
+
+    Objects carrying ``discriminator_key`` are grouped by that property's value
+    and emitted as a JSON Schema ``oneOf`` with an OpenAPI ``discriminator``,
+    which datamodel-code-generator renders as a Pydantic discriminated union.
+
+    :param discriminator_key: the property name to discriminate on (e.g.
+      ``"__typename"``).
+    """
+    strategy = type(
+        "DiscriminatedObject",
+        (DiscriminatedObject,),
+        {"DISCRIMINATOR_KEY": discriminator_key},
+    )
+    builder_class = type(
+        "DiscriminatedSchemaBuilder",
+        (SchemaBuilder,),
+        {"EXTRA_STRATEGIES": (strategy,)},
+    )
+    return builder_class()
 
 
 class Schema(SchemaBuilder):
