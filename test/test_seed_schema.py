@@ -1,3 +1,5 @@
+import uuid
+
 from . import base
 
 
@@ -6,6 +8,48 @@ class TestSeedTuple(base.SchemaNodeTestCase):
         self.add_schema({"type": "array", "items": []})
         self.add_object([None])
         self.assertResult({"type": "array", "items": [{"type": "null"}]})
+
+
+class TestUUIDProperties(base.SchemaNodeTestCase):
+    def test_seeded_format_round_trips(self):
+        self.add_schema({"type": "string", "format": "uuid"})
+        self.assertResult({"type": "string", "format": "uuid"})
+
+    def test_seeded_format_widens_with_plain_string(self):
+        self.add_schema({"type": "string", "format": "uuid"})
+        self.add_object("77db3944-8426-4259-94c8-be147d3e7594::1")
+        self.assertResult(
+            {
+                "anyOf": [
+                    {"type": "string"},
+                    {"type": "string", "format": "uuid"},
+                ]
+            }
+        )
+
+    def test_seeded_format_widens_with_matching_object(self):
+        self.add_schema({"type": "string", "format": "uuid"})
+        self.add_object(uuid.UUID("77db3944-8426-4259-94c8-be147d3e7594"))
+        self.assertResult(
+            {"type": "string", "format": "uuid"}, enforceUserContract=False
+        )
+
+    def test_seeded_union_round_trips(self):
+        self.add_schema(
+            {"anyOf": [{"type": "string"}, {"type": "string", "format": "uuid"}]}
+        )
+        self.assertResult(
+            {
+                "anyOf": [
+                    {"type": "string"},
+                    {"type": "string", "format": "uuid"},
+                ]
+            }
+        )
+
+    def test_seeded_unknown_format_falls_back_to_string(self):
+        self.add_schema({"type": "string", "format": "email"})
+        self.assertResult({"type": "string", "format": "email"})
 
 
 class TestPatternProperties(base.SchemaNodeTestCase):

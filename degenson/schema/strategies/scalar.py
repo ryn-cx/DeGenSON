@@ -48,6 +48,14 @@ class String(TypedSchemaStrategy):
     JS_TYPE = "string"
     PYTHON_TYPE = str
 
+    @classmethod
+    def match_schema(cls, schema):
+        if not super().match_schema(schema):
+            return False
+        return schema.get("format") not in [
+            strategy.FORMAT for strategy in FormattedSchemaStrategy.__subclasses__()
+        ]
+
 
 class Float(TypedSchemaStrategy):
     """

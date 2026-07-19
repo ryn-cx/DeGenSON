@@ -91,6 +91,10 @@ class FormattedSchemaStrategy(TypedSchemaStrategy):
     * `FORMAT`: a valid value of the `format` keyword
     """
 
+    @classmethod
+    def match_schema(cls, schema):
+        return super().match_schema(schema) and schema.get("format") == cls.FORMAT
+
     def to_schema(self):
         schema = super().to_schema()
         schema["format"] = self.FORMAT
